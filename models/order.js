@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const orderSchema = new mongoose.Schema({
-    userName: {
+    userId: {
         type: String,
         ref: "User",
         required: true
@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema({
     items: [{
         productId: String,
         quantity: Number,
-        name: String,
+        title: String,
         image: String,
         price: Number
     }],

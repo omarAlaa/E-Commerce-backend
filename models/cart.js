@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const cartSchema = new mongoose.Schema({
-    userName: {
+    userId: {
         type: String,
         ref: "User",
         required: true
