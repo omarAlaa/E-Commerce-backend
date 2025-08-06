@@ -11,7 +11,9 @@ const category = require('./models/category')
 require('dotenv').config()
 
 app.use(express.json())
-app.use(cors())
+app.use(cors({
+    origin: '*',
+}));
 
 
 const PORT = process.env.PORT
