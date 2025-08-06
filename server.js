@@ -8,19 +8,22 @@ const product = require('./models/product')
 const order = require('./models/order')
 const cart = require('./models/cart')
 const category = require('./models/category')
+require('dotenv').config()
 
 app.use(express.json())
 app.use(cors())
 
-const dbURI = 'mongodb+srv://omaralaa:epass2025@e-commerce.xsa3f.mongodb.net/ecommerce?retryWrites=true&w=majority&appName=E-commerce'
+
+const PORT = process.env.PORT
+const dbURI = process.env.MONGO_URI
 mongoose.connect(dbURI)
     .then(() => {
         console.log("Connected to database")
-        app.listen(5000, () => {
-            console.log('server is listening on port 5000')
-        });
+        app.listen(PORT, () => {
+            console.log(`server is listening on port ${process.env.PORT}`)
+        })
     })
-    .catch((e) => console.log(e));
+    .catch((e) => console.log(e))
 
 app.post('/register', async (req, res) => {
     const { email, userName, password } = req.body
