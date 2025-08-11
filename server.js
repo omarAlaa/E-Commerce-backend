@@ -69,7 +69,8 @@ app.post('/login', async (req, res) => {
             return res.status(401).send('wrong credintials')
         }
         else {
-            if (userCart.items.length > 0) {
+            const oldCart = await cart.findOne({ userId: user._id })
+            if (!oldCart && userCart.items.length > 0) {
                 const newUserCart = new cart({ userId: user._id, items: userCart.items, subtotal: userCart.subtotal })
                 await newUserCart.save()
             }
