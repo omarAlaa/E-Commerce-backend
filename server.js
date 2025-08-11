@@ -26,7 +26,7 @@ mongoose.connect(dbURI)
     .catch((e) => console.log(e))
 
 app.post('/register', async (req, res) => {
-    const { email, userName, password } = req.body
+    const { email, userName, password, userCart } = req.body
     const hashedPassword = await bcrypt.hash(password, 10)
 
     try {
@@ -42,14 +42,20 @@ app.post('/register', async (req, res) => {
             return res.status(402).send('username used')
         }
 
-        await userInfo.create({
+        const newUser = await userInfo.create({
             email,
             userName,
             password: hashedPassword,
             role: 'user'
         })
-        res.status(200).send('ok')
+        if (userCart.items.length > 0) {
+            const newUser = await userInfo.findOne({ userName })
+            const newUserCart = new cart({ userId: newUser._id, items: userCart.items, subtotal: userCart.subtotal })
+            await newUserCart.save()
+        }
+        res.status(200).json({ role: 'user', userName, id: newUser._id })
     } catch (error) {
+        console.log(error)
         res.status(404).send('error')
     }
 })
