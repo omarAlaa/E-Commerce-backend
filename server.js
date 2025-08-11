@@ -61,7 +61,7 @@ app.post('/register', async (req, res) => {
 })
 
 app.post('/login', async (req, res) => {
-    const { email, password } = req.body
+    const { email, password, userCart } = req.body
     try {
         const user = await userInfo.findOne({ email })
 
@@ -69,6 +69,10 @@ app.post('/login', async (req, res) => {
             return res.status(401).send('wrong credintials')
         }
         else {
+            if (userCart.items.length > 0) {
+                const newUserCart = new cart({ userId: user._id, items: userCart.items, subtotal: userCart.subtotal })
+                await newUserCart.save()
+            }
             return res.status(200).json({ role: user.role, userName: user.userName, id: user._id })
         }
     } catch (e) {
