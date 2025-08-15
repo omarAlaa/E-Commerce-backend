@@ -55,7 +55,6 @@ app.post('/register', async (req, res) => {
         }
         res.status(200).json({ role: 'user', userName, id: newUser._id })
     } catch (error) {
-        console.log(error)
         res.status(404).send('error')
     }
 })
@@ -69,10 +68,12 @@ app.post('/login', async (req, res) => {
             return res.status(401).send('wrong credintials')
         }
         else {
-            const oldCart = await cart.findOne({ userId: user._id })
-            if (!oldCart && userCart.items.length > 0) {
-                const newUserCart = new cart({ userId: user._id, items: userCart.items, subtotal: userCart.subtotal })
-                await newUserCart.save()
+            if (user.role === 'user') {
+                const oldCart = await cart.findOne({ userId: user._id })
+                if (!oldCart && userCart) {
+                    const newUserCart = new cart({ userId: user._id, items: userCart.items, subtotal: userCart.subtotal })
+                    await newUserCart.save()
+                }
             }
             return res.status(200).json({ role: user.role, userName: user.userName, id: user._id })
         }
@@ -284,7 +285,7 @@ app.delete('/deleteAccount/:id', async (req, res) => {
 app.get('/orders/:userId', async (req, res) => {
     try {
         const { userId } = req.params
-        const orders = await order.find({ userId })
+        const orders = await order.find({ userId }).sort({ _id: -1 })
         if (!orders) {
             res.status(404).send()
         } else {
@@ -380,7 +381,7 @@ app.delete('/deleteUser/:email', async (req, res) => {
 
 app.get('/allOrders', async (req, res) => {
     try {
-        const orders = await order.find()
+        const orders = await order.find().sort({ _id: -1 })
         res.status(200).json(orders)
     } catch (e) {
         res.status(500).send()
