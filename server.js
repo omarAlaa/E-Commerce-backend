@@ -70,7 +70,7 @@ app.post('/login', async (req, res) => {
         else {
             if (user.role === 'user') {
                 const oldCart = await cart.findOne({ userId: user._id })
-                if (!oldCart && userCart) {
+                if (!oldCart && userCart.items) {
                     const newUserCart = new cart({ userId: user._id, items: userCart.items, subtotal: userCart.subtotal })
                     await newUserCart.save()
                 }
