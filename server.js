@@ -48,7 +48,7 @@ app.post('/register', async (req, res) => {
             password: hashedPassword,
             role: 'user'
         })
-        if (userCart.items.length > 0) {
+        if (userCart) {
             const newUser = await userInfo.findOne({ userName })
             const newUserCart = new cart({ userId: newUser._id, items: userCart.items, subtotal: userCart.subtotal })
             await newUserCart.save()
@@ -422,6 +422,16 @@ app.post('/addCategory', async (req, res) => {
             name,
             image
         })
+        res.status(200).send()
+    } catch (error) {
+        res.status(500).send()
+    }
+})
+
+app.delete('/deleteCategory/:id', async (req, res) => {
+    try {
+        const { id } = req.params
+        await category.findByIdAndDelete(id)
         res.status(200).send()
     } catch (error) {
         res.status(500).send()
