@@ -1,0 +1,121 @@
+const Product = require('../models/product')
+
+const getProducts = async (req, res, next) => {
+    try {
+        const products = await Product.find().sort({ _id: -1 })
+
+        if (products.length === 0) {
+            return res.status(404).json({ message: 'No products yet' })
+        }
+
+        return res.status(200).json(products)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getProduct = async (req, res, next) => {
+    const { productId } = req.params
+
+    try {
+        const product = await Product.findById(productId)
+
+        if (!product) {
+            return res.status(404).json({ message: 'Product might be deleted' })
+        }
+
+        return res.status(200).json(product)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getCategoryProducts = async (req, res, next) => {
+    const { category } = req.params
+
+    try {
+        const products = await Product.find({ category }).sort({ _id: -1 })
+
+        if (!products) {
+            return res.status(404).json({ message: 'No products in this category' })
+        }
+
+        return res.status(200).json(products)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getNewArrivals = async (req, res, next) => {
+    try {
+        const newArrivals = await Product.find().sort({ _id: -1 }).limit(5)
+
+        if (newArrivals.length === 0) {
+            return res.status(404).json({ message: 'No products yet' })
+        }
+
+        return res.status(200).json(newArrivals)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const getPopularProducts = async (req, res, next) => {
+    try {
+        const popularProducts = await Product.find().sort({ 'rate.rating': -1 }).limit(10)
+
+        if (popularProducts.length === 0) {
+            return res.status(404).json({ message: 'No products yet' })
+        }
+
+        return res.status(200).json(popularProducts)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const addProduct = async (req, res, next) => {
+    const { title, price, description, category, image } = req.body
+
+    try {
+        const product = await Product.create({
+            title,
+            price,
+            description,
+            category,
+            image,
+            rate: { rating: 0, count: 0 }
+        })
+
+        return res.status(200).json(product)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const updateProduct = async (req, res, next) => {
+    const { productId } = req.params
+    const { dialogProduct } = req.body
+
+    try {
+        await Product.findByIdAndUpdate(productId, dialogProduct)
+
+        return res.status(200).json(dialogProduct)
+    } catch (error) {
+        next(error)
+    }
+}
+
+const deleteProduct = async (req, res, next) => {
+    const { productId } = req.params
+
+    try {
+        await Product.findByIdAndDelete(productId)
+
+        return res.status(200).send()
+    } catch (error) {
+        next(error)
+    }
+}
+
+module.exports = { getProducts, getProduct, getCategoryProducts, getNewArrivals, getPopularProducts, addProduct, updateProduct, deleteProduct }

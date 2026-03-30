@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "main": "intro.js",
   "scripts": {
+    "dev": "node --watch server.js",
     "start": "node server.js"
   },
   "keywords": [],
@@ -14,6 +15,7 @@
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.10.1"
   }
 }
