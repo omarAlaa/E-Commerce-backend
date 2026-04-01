@@ -78,6 +78,7 @@ const login = async (req, res, next) => {
             return res.status(200).json({ user: { ...user._doc, token }, cart: cart?.items })
         }
     } catch (error) {
+        console.log(error)
         next(error)
     }
 }

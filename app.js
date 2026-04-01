@@ -15,8 +15,7 @@ const app = express()
 app.use(express.json())
 
 app.use(cors({
-    origin: true,
-    credentials: true
+    origin: ['http://localhost:5173', 'http://192.168.1.8:5173', 'https://e-commerce-frontend-opal-nu.vercel.app']
 }))
 
 app.use('/api/auth', authRoutes)
