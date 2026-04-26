@@ -95,12 +95,12 @@ const addProduct = async (req, res, next) => {
 
 const updateProduct = async (req, res, next) => {
     const { productId } = req.params
-    const { dialogProduct } = req.body
+    const { updatedProduct } = req.body
 
     try {
-        await Product.findByIdAndUpdate(productId, dialogProduct)
+        await Product.findByIdAndUpdate(productId, updatedProduct)
 
-        return res.status(200).json(dialogProduct)
+        return res.status(200).json(updatedProduct)
     } catch (error) {
         next(error)
     }
