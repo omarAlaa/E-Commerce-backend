@@ -22,9 +22,9 @@ const getProducts = async (req, res, next) => {
 }
 
 const getProduct = async (req, res, next) => {
-    const { productId } = req.params
-
     try {
+        const { productId } = req.params
+
         const product = await Product.findById(productId)
 
         if (!product) {
@@ -87,9 +87,9 @@ const getPopularProducts = async (req, res, next) => {
 }
 
 const addProduct = async (req, res, next) => {
-    const { title, price, description, category, image } = req.body
-
     try {
+        const { title, price, description, category, image } = req.body
+
         const product = await Product.create({
             title,
             price,
@@ -106,10 +106,10 @@ const addProduct = async (req, res, next) => {
 }
 
 const updateProduct = async (req, res, next) => {
-    const { productId } = req.params
-    const { updatedProduct } = req.body
-
     try {
+        const { productId } = req.params
+        const { updatedProduct } = req.body
+
         await Product.findByIdAndUpdate(productId, updatedProduct)
 
         return res.status(200).json(updatedProduct)
@@ -119,9 +119,9 @@ const updateProduct = async (req, res, next) => {
 }
 
 const deleteProduct = async (req, res, next) => {
-    const { productId } = req.params
-
     try {
+        const { productId } = req.params
+
         await Product.findByIdAndDelete(productId)
 
         return res.status(200).send()

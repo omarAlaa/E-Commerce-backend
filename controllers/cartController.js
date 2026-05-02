@@ -1,9 +1,9 @@
 const Cart = require('../models/cart')
 
 const getCart = async (req, res, next) => {
-    const userId = req.user.id
-
     try {
+        const userId = req.user.id
+
         const cart = await Cart.findOne({ user: userId }).populate('items.product')
 
         return res.status(200).json(cart?.items || null)
@@ -13,11 +13,11 @@ const getCart = async (req, res, next) => {
 }
 
 const addToCart = async (req, res, next) => {
-    const userId = req.user.id
-
-    const { productId } = req.params
-
     try {
+        const userId = req.user.id
+
+        const { productId } = req.params
+
         let cart = await Cart.findOne({ user: userId })
 
         if (!cart) {
@@ -37,13 +37,13 @@ const addToCart = async (req, res, next) => {
 }
 
 const updateQuantity = async (req, res, next) => {
-    const userId = req.user.id
-
-    const { productId } = req.params
-
-    const { quantity } = req.body
-
     try {
+        const userId = req.user.id
+
+        const { productId } = req.params
+
+        const { quantity } = req.body
+
         let cart = await Cart.findOne({ user: userId })
 
         const itemIndex = cart.items.findIndex(item => item.product.equals(productId))
@@ -60,11 +60,11 @@ const updateQuantity = async (req, res, next) => {
 }
 
 const deleteFromCart = async (req, res, next) => {
-    const userId = req.user.id
-
-    const { productId } = req.params
-
     try {
+        const userId = req.user.id
+
+        const { productId } = req.params
+
         let cart = await Cart.findOne({ user: userId })
 
         const itemIndex = cart.items.findIndex(item => item.product.equals(productId))
@@ -88,9 +88,9 @@ const deleteFromCart = async (req, res, next) => {
 }
 
 const emptyCart = async (req, res, next) => {
-    const userId = req.user.id
-
     try {
+        const userId = req.user.id
+
         await Cart.findOneAndDelete({ user: userId })
 
         return res.status(200).send()

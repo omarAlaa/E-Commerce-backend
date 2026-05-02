@@ -6,11 +6,11 @@ const Cart = require('../models/cart')
 const generateToken = require('../utils/generateToken')
 
 const register = async (req, res, next) => {
-    const { email, userName, password, cartItems } = req.body
-
-    let user, cart, session
-
     try {
+        const { email, userName, password, cartItems } = req.body
+
+        let user, cart, session
+
         const hashedPassword = await bcrypt.hash(password, 10)
 
         session = await mongoose.startSession()
@@ -48,11 +48,11 @@ const register = async (req, res, next) => {
 }
 
 const login = async (req, res, next) => {
-    const { email, password, cartItems } = req.body
-
-    let cart
-
     try {
+        const { email, password, cartItems } = req.body
+
+        let cart
+
         const user = await User.findOne({ email }).select('+password')
 
         if (!user || !await bcrypt.compare(password, user.password)) {

@@ -11,9 +11,9 @@ const getCategories = async (req, res, next) => {
 }
 
 const addCategory = async (req, res, next) => {
-    const { name, imageURL } = req.body
-
     try {
+        const { name, imageURL } = req.body
+
         const category = await Category.create({
             name,
             imageURL
@@ -26,9 +26,9 @@ const addCategory = async (req, res, next) => {
 }
 
 const deleteCategory = async (req, res, next) => {
-    const { categoryId } = req.params
-
     try {
+        const { categoryId } = req.params
+
         await Category.findByIdAndDelete(categoryId)
 
         return res.status(200).send()

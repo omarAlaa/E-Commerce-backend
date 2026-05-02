@@ -38,10 +38,10 @@ const getAdmins = async (req, res, next) => {
 }
 
 const changeUsername = async (req, res, next) => {
-    const userId = req.user.id
-    const { newUsername } = req.body
-
     try {
+        const userId = req.user.id
+        const { newUsername } = req.body
+
         const updatedUser = await User.findByIdAndUpdate(userId, { userName: newUsername }, { new: true })
 
         return res.status(200).json(updatedUser)
@@ -51,10 +51,10 @@ const changeUsername = async (req, res, next) => {
 }
 
 const changePassword = async (req, res, next) => {
-    const userId = req.user.id
-    const { newPassword } = req.body
-
     try {
+        const userId = req.user.id
+        const { newPassword } = req.body
+
         const hashedPassword = await bcrypt.hash(newPassword, 10)
 
         await User.findByIdAndUpdate(userId, { password: hashedPassword })
@@ -66,11 +66,11 @@ const changePassword = async (req, res, next) => {
 }
 
 const deleteAccount = async (req, res, next) => {
-    const userId = req.user.id
-
-    let session
-
     try {
+        let session
+
+        const userId = req.user.id
+
         session = await mongoose.startSession()
 
         await session.withTransaction(async () => {
@@ -90,9 +90,9 @@ const deleteAccount = async (req, res, next) => {
 }
 
 const makeAdmin = async (req, res, next) => {
-    const { userId } = req.params
-
     try {
+        const { userId } = req.params
+
         const newAdmin = await User.findByIdAndUpdate(userId, { role: 'admin' }, { new: true })
 
         return res.status(200).json(newAdmin)
@@ -102,11 +102,11 @@ const makeAdmin = async (req, res, next) => {
 }
 
 const deleteUser = async (req, res, next) => {
-    const { userId } = req.params
-
-    let session
-
     try {
+        let session
+
+        const { userId } = req.params
+
         session = await mongoose.startSession()
 
         await session.withTransaction(async () => {

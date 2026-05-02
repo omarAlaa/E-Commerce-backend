@@ -45,9 +45,9 @@ const getUserOrders = async (req, res, next) => {
 }
 
 const addOrder = async (req, res, next) => {
-    const userId = req.user.id
-
     try {
+        const userId = req.user.id
+
         const cart = await Cart.findOne({ user: userId }).populate('items.product')
 
         let items = []
@@ -81,10 +81,10 @@ const addOrder = async (req, res, next) => {
 }
 
 const updateOrder = async (req, res, next) => {
-    const { orderId } = req.params
-    const { status } = req.body
-
     try {
+        const { orderId } = req.params
+        const { status } = req.body
+
         const updatedOrder = await Order.findByIdAndUpdate(orderId, { status }, { new: true })
 
         return res.status(200).json(updatedOrder)
