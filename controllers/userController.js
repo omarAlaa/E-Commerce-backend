@@ -5,9 +5,16 @@ const bcrypt = require('bcrypt')
 
 const getUsers = async (req, res, next) => {
     try {
-        const users = await User.find({ role: 'user' }).sort({ _id: -1 })
+        const { page } = req.params
 
-        return res.status(200).json(users)
+        const totalUsers = await User.find({ role: 'user' }).countDocuments()
+        const totalPages = Math.ceil(totalUsers / 10)
+
+        const start = (page - 1) * 10
+
+        const users = await User.find({ role: 'user' }).sort({ _id: -1 }).skip(start).limit(10)
+
+        return res.status(200).json({ users, totalPages })
     } catch (error) {
         next(error)
     }
@@ -15,9 +22,16 @@ const getUsers = async (req, res, next) => {
 
 const getAdmins = async (req, res, next) => {
     try {
-        const admins = await User.find({ role: 'admin' }).sort({ _id: -1 })
+        const { page } = req.params
 
-        return res.status(200).json(admins)
+        const totalAdmins = await User.find({ role: 'admin' }).countDocuments()
+        const totalPages = Math.ceil(totalAdmins / 10)
+
+        const start = (page - 1) * 10
+
+        const admins = await User.find({ role: 'admin' }).sort({ _id: -1 }).skip(start).limit(10)
+
+        return res.status(200).json({ admins, totalPages })
     } catch (error) {
         next(error)
     }

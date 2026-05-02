@@ -6,11 +6,11 @@ const { getProducts, getProduct, getCategoryProducts, getNewArrivals, getPopular
 const auth = require('../middlewares/authMiddleware')
 const isAdmin = require('../middlewares/isAdminMiddleware')
 
-router.get('/allProducts', getProducts)
+router.get('/allProducts/:page', getProducts)
 router.get('/newArrivals', getNewArrivals)
 router.get('/popularProducts', getPopularProducts)
 router.get('/:productId', getProduct)
-router.get('/categoryProducts/:category', getCategoryProducts)
+router.get('/categoryProducts/:category/:page', getCategoryProducts)
 router.post('/', auth, isAdmin, addProduct)
 router.put('/:productId', auth, isAdmin, updateProduct)
 router.delete('/:productId', auth, isAdmin, deleteProduct)

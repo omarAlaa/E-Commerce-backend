@@ -2,13 +2,20 @@ const Product = require('../models/product')
 
 const getProducts = async (req, res, next) => {
     try {
-        const products = await Product.find().sort({ _id: -1 })
+        const { page } = req.params
+
+        const totalProducts = await Product.countDocuments()
+        const totalPages = Math.ceil(totalProducts / 10)
+
+        const start = (page - 1) * 10
+
+        const products = await Product.find().sort({ _id: -1 }).skip(start).limit(10)
 
         if (products.length === 0) {
             return res.status(404).json({ message: 'No products yet' })
         }
 
-        return res.status(200).json(products)
+        return res.status(200).json({ products, totalPages })
     } catch (error) {
         next(error)
     }
@@ -31,16 +38,21 @@ const getProduct = async (req, res, next) => {
 }
 
 const getCategoryProducts = async (req, res, next) => {
-    const { category } = req.params
-
     try {
-        const products = await Product.find({ category }).sort({ _id: -1 })
+        const { category, page } = req.params
+
+        const totalProducts = await Product.find({ category }).countDocuments()
+        const totalPages = Math.ceil(totalProducts / 10)
+
+        const start = (page - 1) * 10
+
+        const products = await Product.find({ category }).sort({ _id: -1 }).skip(start).limit(10)
 
         if (!products) {
             return res.status(404).json({ message: 'No products in this category' })
         }
 
-        return res.status(200).json(products)
+        return res.status(200).json({ products, totalPages })
     } catch (error) {
         next(error)
     }
