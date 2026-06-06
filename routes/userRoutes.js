@@ -6,8 +6,8 @@ const { getUsers, getAdmins, changeUsername, changePassword, deleteAccount, make
 const auth = require('../middlewares/authMiddleware')
 const isAdmin = require('../middlewares/isAdminMiddleware')
 
-router.get('/users/:page', auth, isAdmin, getUsers)
-router.get('/admins/:page', auth, isAdmin, getAdmins)
+router.get('/users', auth, isAdmin, getUsers)
+router.get('/admins', auth, isAdmin, getAdmins)
 router.patch('/makeAdmin/:userId', auth, isAdmin, makeAdmin)
 router.delete('/deleteUser/:userId', auth, isAdmin, deleteUser)
 router.patch('/changeUsername', auth, changeUsername)

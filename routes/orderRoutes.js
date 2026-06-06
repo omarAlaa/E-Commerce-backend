@@ -6,7 +6,7 @@ const { getAllOrders, getUserOrders, addOrder, updateOrder, cancelOrder } = requ
 const auth = require('../middlewares/authMiddleware')
 const isAdmin = require('../middlewares/isAdminMiddleware')
 
-router.get('/:page', auth, isAdmin, getAllOrders)
+router.get('/', auth, isAdmin, getAllOrders)
 router.get('/userOrders/:page', auth, getUserOrders)
 router.post('/', auth, addOrder)
 router.put('/:orderId', auth, isAdmin, updateOrder)

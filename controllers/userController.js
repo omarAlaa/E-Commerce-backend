@@ -5,14 +5,23 @@ const bcrypt = require('bcrypt')
 
 const getUsers = async (req, res, next) => {
     try {
-        const { page } = req.params
+        const { search = "", page = 1 } = req.query
 
-        const totalUsers = await User.find({ role: 'user' }).countDocuments()
-        const totalPages = Math.ceil(totalUsers / 10)
+        const filter = {
+            userName: { $regex: search, $options: "i" },
+            role: 'user'
+        }
 
         const start = (page - 1) * 10
 
-        const users = await User.find({ role: 'user' }).sort({ _id: -1 }).skip(start).limit(10)
+        const [totalUsers, users] = await Promise.all([
+            User.countDocuments(filter),
+            User.find(filter)
+                .sort({ _id: -1 })
+                .skip(start)
+                .limit(10)
+        ])
+        const totalPages = Math.ceil(totalUsers / 10)
 
         return res.status(200).json({ users, totalPages })
     } catch (error) {
@@ -22,14 +31,23 @@ const getUsers = async (req, res, next) => {
 
 const getAdmins = async (req, res, next) => {
     try {
-        const { page } = req.params
+        const { search = "", page = 1 } = req.query
 
-        const totalAdmins = await User.find({ role: 'admin' }).countDocuments()
-        const totalPages = Math.ceil(totalAdmins / 10)
+        const filter = {
+            userName: { $regex: search, $options: "i" },
+            role: 'admin'
+        }
 
         const start = (page - 1) * 10
 
-        const admins = await User.find({ role: 'admin' }).sort({ _id: -1 }).skip(start).limit(10)
+        const [totalAdmins, admins] = await Promise.all([
+            User.countDocuments(filter),
+            User.find(filter)
+                .sort({ _id: -1 })
+                .skip(start)
+                .limit(10)
+        ])
+        const totalPages = Math.ceil(totalAdmins / 10)
 
         return res.status(200).json({ admins, totalPages })
     } catch (error) {

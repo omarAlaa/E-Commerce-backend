@@ -6,7 +6,7 @@ const { getProducts, getProduct, getCategoryProducts, getNewArrivals, getPopular
 const auth = require('../middlewares/authMiddleware')
 const isAdmin = require('../middlewares/isAdminMiddleware')
 
-router.get('/allProducts/:page', getProducts)
+router.get('/allProducts', getProducts)
 router.get('/newArrivals', getNewArrivals)
 router.get('/popularProducts', getPopularProducts)
 router.get('/:productId', getProduct)

@@ -2,18 +2,26 @@ const Product = require('../models/product')
 
 const getProducts = async (req, res, next) => {
     try {
-        const { page } = req.params
+        const { search = "", filteredCategory = "", page = 1 } = req.query
 
-        const totalProducts = await Product.countDocuments()
-        const totalPages = Math.ceil(totalProducts / 10)
+        const filter = {
+            title: { $regex: search, $options: "i" },
+        }
+
+        if (filteredCategory) {
+            filter.category = filteredCategory
+        }
 
         const start = (page - 1) * 10
 
-        const products = await Product.find().sort({ _id: -1 }).skip(start).limit(10)
-
-        if (products.length === 0) {
-            return res.status(404).json({ message: 'No products yet' })
-        }
+        const [totalProducts, products] = await Promise.all([
+            Product.countDocuments(filter),
+            Product.find(filter)
+                .sort({ _id: -1 })
+                .skip(start)
+                .limit(10)
+        ])
+        const totalPages = Math.ceil(totalProducts / 10)
 
         return res.status(200).json({ products, totalPages })
     } catch (error) {
