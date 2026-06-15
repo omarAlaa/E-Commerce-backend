@@ -84,9 +84,9 @@ const changePassword = async (req, res, next) => {
 }
 
 const deleteAccount = async (req, res, next) => {
-    try {
-        let session
+    let session
 
+    try {
         const userId = req.user.id
 
         session = await mongoose.startSession()
@@ -120,9 +120,9 @@ const makeAdmin = async (req, res, next) => {
 }
 
 const deleteUser = async (req, res, next) => {
-    try {
-        let session
+    let session
 
+    try {
         const { userId } = req.params
 
         session = await mongoose.startSession()

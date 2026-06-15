@@ -6,10 +6,10 @@ const Cart = require('../models/cart')
 const generateToken = require('../utils/generateToken')
 
 const register = async (req, res, next) => {
+    let user, cart, session
+
     try {
         const { email, userName, password, cartItems } = req.body
-
-        let user, cart, session
 
         const hashedPassword = await bcrypt.hash(password, 10)
 
@@ -78,7 +78,6 @@ const login = async (req, res, next) => {
             return res.status(200).json({ user: { ...user._doc, token }, cart: cart?.items })
         }
     } catch (error) {
-        console.log(error)
         next(error)
     }
 }
