@@ -59,18 +59,16 @@ const login = async (req, res, next) => {
             return res.status(401).json({ message: 'Wrong username or password' })
         }
         else {
-            if (user.role === 'user') {
-                cart = await Cart.findOne({ user: user._id })
+            cart = await Cart.findOne({ user: user._id })
 
-                if (!cart && cartItems) {
-                    cart = await Cart.create({
-                        user: user._id,
-                        items: cartItems
-                    })
-                }
-
-                cart = await cart?.populate('items.product')
+            if (!cart && cartItems) {
+                cart = await Cart.create({
+                    user: user._id,
+                    items: cartItems
+                })
             }
+
+            cart = await cart?.populate('items.product')
 
             user.password = undefined
             const token = generateToken(user)
